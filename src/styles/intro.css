@@ -1,0 +1,261 @@
+/* ─────────────────────────────────────────────────────────────
+   Entrada (intro): faixa vermelha desce → emblema cai na faixa →
+   faixa abre espaço para o título → cortina sobe revelando o site.
+   ───────────────────────────────────────────────────────────── */
+html.intro-lock,
+html.intro-lock body {
+  overflow: hidden;
+}
+/* visitante que já viu a entrada nesta sessão, ou que pediu menos movimento */
+html.no-intro .intro {
+  display: none;
+}
+
+.intro {
+  --bw: clamp(220px, 26vw, 440px); /* largura da faixa */
+  --shift: -26vw; /* quanto a faixa anda para a esquerda */
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #f6f6f4;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 720ms var(--ease-io);
+  will-change: transform;
+}
+.intro.is-out {
+  transform: translateY(-100%);
+}
+
+/* faixa + emblema */
+.intro__stage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--bw);
+  transform: translateX(-50%);
+  animation: intro-shift 900ms var(--ease-io) 1450ms both;
+}
+.intro__band {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.intro__band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  clip-path: inset(0 0 100% 0);
+  animation: intro-drop 780ms var(--ease-io) 80ms both;
+}
+.intro__band-thin {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc(-1 * clamp(18px, 2vw, 30px));
+  width: clamp(6px, 0.6vw, 10px);
+  background: var(--red);
+  clip-path: inset(0 0 100% 0);
+  animation: intro-drop 780ms var(--ease-io) 240ms both;
+}
+.intro__emblem {
+  position: relative;
+  width: 112%;
+  max-width: none;
+  height: auto;
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.28));
+  animation: intro-fall 1050ms cubic-bezier(0.22, 1.25, 0.36, 1) 380ms both;
+}
+
+/* título */
+.intro__copy {
+  position: absolute;
+  left: calc(50% + var(--shift) + var(--bw) / 2 + clamp(40px, 5vw, 96px));
+  right: var(--gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-0);
+}
+.intro__title {
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 850;
+  font-stretch: 72%;
+  font-size: clamp(2.6rem, 0.6rem + 5vw, 6.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.intro__line {
+  display: block;
+  overflow: hidden;
+  clip-path: inset(-0.3em -0.2em 0 -0.2em);
+  padding: 0.04em 0.04em 0.06em 0;
+}
+.intro__line > span {
+  display: block;
+  transform: translateY(150%);
+  animation: intro-rise 820ms var(--ease-out) both;
+}
+.intro__line:nth-child(1) > span {
+  animation-delay: 2050ms;
+}
+.intro__line:nth-child(2) > span {
+  animation-delay: 2180ms;
+}
+.intro__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: clamp(18px, 2.4vw, 32px) 0 0;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4a4f57;
+  opacity: 0;
+  animation: intro-fade 700ms var(--ease-out) 2420ms both;
+}
+.intro__meta span + span::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 14px 2px 0;
+  background: var(--red);
+  vertical-align: middle;
+}
+
+.intro__skip {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(18px, 4vh, 40px);
+  padding: 10px 16px;
+  border: 1px solid rgba(8, 9, 11, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink-0);
+  font: 600 var(--fs-small) / 1 var(--f-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  animation: intro-fade 500ms ease 500ms both;
+}
+.intro__skip:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+@keyframes intro-drop {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes intro-fall {
+  from {
+    transform: translateY(-115vh) rotate(-10deg);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes intro-shift {
+  to {
+    transform: translateX(calc(-50% + var(--shift)));
+  }
+}
+@keyframes intro-rise {
+  to {
+    transform: none;
+  }
+}
+@keyframes intro-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* celular: a faixa toma a tela, o emblema sobe e o título entra embaixo, em branco */
+@media (max-width: 760px) {
+  .intro {
+    --bw: 62vw;
+    /* quando a faixa ocupa a tela, o fundo vira vermelho também (contraste real do texto branco) */
+    animation: intro-bg-red 1ms linear 2200ms forwards;
+  }
+  .intro__stage {
+    top: -22vh;
+    bottom: -22vh;
+    animation-name: intro-up;
+  }
+  .intro__band::before {
+    animation:
+      intro-drop 780ms var(--ease-io) 80ms both,
+      intro-widen 800ms var(--ease-io) 1450ms forwards;
+  }
+  .intro__band-thin {
+    animation:
+      intro-drop 780ms var(--ease-io) 240ms both,
+      intro-fade-out 300ms ease 1450ms forwards;
+  }
+  .intro__emblem {
+    width: 118%;
+  }
+  .intro__copy {
+    left: var(--gutter);
+    right: var(--gutter);
+    top: auto;
+    bottom: 17vh;
+    transform: none;
+    color: #fff;
+  }
+  .intro__title {
+    font-size: clamp(2.5rem, 12.5vw, 4.2rem);
+  }
+  .intro__title .dot {
+    color: var(--ink-0);
+  }
+  .intro__meta {
+    color: #fff;
+    font-size: 0.75rem;
+  }
+  .intro__meta span + span::before {
+    background: #fff;
+  }
+  .intro__skip {
+    bottom: 22px;
+  }
+}
+@keyframes intro-up {
+  to {
+    transform: translate(-50%, -14vh);
+  }
+}
+@keyframes intro-widen {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: scaleX(1.62);
+  }
+}
+@keyframes intro-bg-red {
+  to {
+    background: var(--red);
+  }
+}
+@keyframes intro-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+}
