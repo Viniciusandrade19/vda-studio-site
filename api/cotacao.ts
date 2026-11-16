@@ -14,7 +14,7 @@
    • limite de pedidos por IP (por instância — veja o README para o limite global);
    • respostas e logs sem stack trace, sem dados pessoais e sem o endereço do webhook.
    ───────────────────────────────────────────────────────────── */
-import { parseQuote } from '../src/lib/quote-validation';
+import { parseQuote } from '../src/lib/quote-validation.js';
 
 const MAX_BODY = 4 * 1024;
 const MIN_FILL_MS = 2500;
