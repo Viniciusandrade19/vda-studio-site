@@ -7,10 +7,10 @@ export const SITE = {
   fullName: 'LíderPrev — Proteção Veicular',
   city: 'Campina Grande',
   state: 'PB',
-  /** Número como cadastrado no WhatsApp Business (+55 83 9930-2606). */
-  whatsappNumber: '558399302606' as string,
-  phoneDisplay: '(83) 99930-2606',
-  phoneHref: 'tel:+5583999302606',
+  /** Número da agência, como cadastrado no WhatsApp Business (+55 82 8788-1706). */
+  whatsappNumber: '558287881706' as string,
+  phoneDisplay: '(82) 98788-1706',
+  phoneHref: 'tel:+5582987881706',
   instagramHandle: '@liderprevpb',
   instagramUrl: 'https://www.instagram.com/liderprevpb/',
   studio: {
